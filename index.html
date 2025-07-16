@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://unpkg.com/@rive-app/webgl"></script>
+  <style>
+    html, body {
+      margin: 0;
+      background: transparent;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      width: 1920px;
+      height: 1080px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    const dpr = window.devicePixelRatio || 1;
+    const canvas = document.getElementById("canvas");
+  
+    // Ajustamos resolución interna para alta calidad
+    canvas.width = 1920 * dpr;
+    canvas.height = 1080 * dpr;
+  
+    let mostrarInput = null; // Aquí guardaremos el input booleano
+  
+    const riveInstance = new rive.Rive({
+      src: "untitled (1).riv", // Pon aquí tu archivo real
+      canvas: canvas,
+      autoplay: true,
+      stateMachines: ["State Machine 1"], // Asegúrate que sea el nombre exacto de tu State Machine
+      enableEvents: true,
+      fit: rive.Fit.Cover, // 👈 Sin márgenes, cubre todo
+  
+      onLoad: () => {
+        console.log("Cargado ✅");
+  
+        // Buscar el input llamado "mostrar"
+        const inputs = riveInstance.stateMachineInputs("State Machine 1");
+        mostrarInput = inputs.find(input => input.name === "mostrar");
+  
+        if (mostrarInput) {
+          console.log("Input 'mostrar' encontrado ✅", mostrarInput);
+  
+          // Inicializa el estado en falso (opcional)
+          mostrarInput.value = false;
+  
+          // Escuchar clic para alternar valor
+          document.addEventListener("click", () => {
+            mostrarInput.value = !mostrarInput.value;
+            console.log("Nuevo estado de 'mostrar':", mostrarInput.value);
+          });
+        } else {
+          console.warn("❌ Input 'mostrar' no encontrado. Revisa que exista y esté en uso en la State Machine.");
+        }
+      }
+    });
+  </script>
+
+  <button>transition</button>
+  
+</body>
+</html>

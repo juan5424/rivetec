@@ -111,3 +111,57 @@
 
 </body>
 </html>
+
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // 1) Leer precios
+        decimal[] precio = new decimal[6]; // usaremos 1..5
+        for (int i = 1; i <= 5; i++)
+        {
+            Console.Write($"Precio P{i}: ");
+            precio[i] = decimal.Parse(Console.ReadLine()!);
+        }
+
+        // 2) Inicializar acumuladores
+        int[] vendidos = new int[6]; // 1..5
+        decimal totalRecaudado = 0m;
+
+        while (true)
+        {
+            Console.Write("Clave de boleto (1..5) o -1 para terminar: ");
+            int clave = int.Parse(Console.ReadLine()!);
+
+            if (clave == -1) break;
+            if (clave < 1 || clave > 5)
+            {
+                Console.WriteLine("Clave inválida. Intenta otra vez.");
+                continue;
+            }
+
+            Console.Write("Cantidad vendida: ");
+            int cant = int.Parse(Console.ReadLine()!);
+            if (cant < 0)
+            {
+                Console.WriteLine("Cantidad inválida. Intenta otra vez.");
+                continue;
+            }
+
+            decimal importe = precio[clave] * cant;
+            Console.WriteLine($"Venta → Tipo: {clave}  Cantidad: {cant}  Importe: {importe}");
+
+            vendidos[clave] += cant;
+            totalRecaudado += importe;
+        }
+
+        Console.WriteLine("\n--- Resumen ---");
+        for (int i = 1; i <= 5; i++)
+            Console.WriteLine($"Vendidos tipo {i}: {vendidos[i]}");
+
+        Console.WriteLine($"Recaudación total: {totalRecaudado}");
+    }
+}
